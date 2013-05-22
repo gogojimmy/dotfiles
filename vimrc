@@ -25,20 +25,18 @@ set incsearch   "find the next match as we type the search
 
 set number      "add line numbers
 set showbreak=...
-set nobackup
-set nowritebackup
-set ruler		" show the cursor position all the time
-set lines=50
-set columns=90
+set wrap linebreak nolist
+
 "add some line space for easy reading
 set linespace=2
-
-" Switch wrap off for everything
-set nowrap
+set nobackup
+set nowritebackup
 
 "disable visual bell
 set visualbell t_vb=
-set fo=l
+
+" Switch wrap off for everything
+set nowrap
 
 "statusline setup
 set statusline=%f       "tail of the filename
@@ -61,6 +59,10 @@ set guioptions-=T
 set guioptions-=L
 set guioptions-=r
 
+"try to make possible to navigate within lines of wrapped lines
+nmap <Down> gj
+nmap <Up> gk
+set fo=l
 
 "mapping for command key to map navigation thru display lines instead
 "of just numbered lines
@@ -84,53 +86,6 @@ nnoremap <CR> :nohlsearch<cr>
 nmap <Down> gj
 nmap <Up> gk
 
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
-
-  " Set File type to 'text' for files ending in .txt
-  autocmd BufNewFile,BufRead *.txt setfiletype text
-
-  " Enable soft-wrapping for text files
-  autocmd FileType text,markdown,html,xhtml,eruby setlocal wrap linebreak nolist
-
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-  au!
-
-  " For all text files set 'textwidth' to 78 characters.
-  " autocmd FileType text setlocal textwidth=78
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
-
-  " Automatically load .vimrc source when saved
-  autocmd BufWritePost .vimrc source $MYVIMRC
-
-  augroup END
-
-else
-
-  set autoindent		" always set autoindenting on
-
-endif " has("autocmd")
-
-" if has("folding")
-  " set foldenable
-  " set foldmethod=syntax
-  " set foldlevel=1
-  " set foldnestmax=2
-  " set foldtext=strpart(getline(v:foldstart),0,50).'\ ...\ '.substitute(getline(v:foldend),'^[\ #]*','','g').'\ '
-" endif
 
 " Leader shortcuts for Rails commands
 map <Leader>m :Rmodel
@@ -327,9 +282,9 @@ function! s:Median(nums)
 endfunction
 
 "indent settings
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set autoindent
 
@@ -358,12 +313,8 @@ set sidescroll=1
 filetype plugin on
 filetype indent on
 
-" Switch syntax highlighting on, when the terminal has colors
-" Also switch on highlighting the last used search pattern.
-if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
-  syntax on
-  set hlsearch
-endif
+"turn on syntax highlighting
+syntax on
 
 "some stuff to get the mouse going in term
 set mouse=a
@@ -392,7 +343,7 @@ if has("gui_running")
     endif
 
     if has("gui_mac") || has("gui_macvim")
-        set guifont=Menlo:h12
+        set guifont=Menlo:h14
         set transparency=7
     endif
 
