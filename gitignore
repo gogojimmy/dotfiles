@@ -116,3 +116,6 @@
 *.orig
 *.rej
 *.pyc
+*.swp
+*.swo
+*.swn
